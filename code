@@ -24,8 +24,23 @@ class Player(Game_sprite):
         if keys[K_s] and self.rect.y < win_h - 90:
             self.rect.y += self.speed
 
-platform1 = Player('platform1.png', 30, 200, 90, 90, 10) 
-platform2 = Player('platform2.png', 520, 200, 90, 90, 10)
+platform1 = Player('platform1.png', 30, 250, 90, 90, 15) 
+platform2 = Player('platform2.png', 520, 200, 90, 90, 15)
+
+#шрифт
+
+font.init()
+font1 = font.Font(None,55)
+text1 = font1.render('Игрок 1 проиграл', 1, (255,255,255))
+text2 = font1.render('Игрок 2 проиграл', 1, (255,255,255))
+
+#перемещение мяча
+speed_x=5
+speed_y=5
+
+
+
+
 back = (129, 197, 111)
 win_w = 600
 win_h = 600
@@ -40,5 +55,29 @@ while game:
     if finish != True:
         win.fill(back)
         ball.reset()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if sprite.collide_rect(platform1, ball) or sprite.collide_rect(platform2, ball):
+            speed_x *= -1
+        if  ball.rect.y > win_h-90 or ball.rect.y<0:
+            speed_y *= -1 
+        
+        #итог игры 
+        if ball.rect.x<0:
+            finish = True
+            win.blit(text1,(250,200))
+        if ball.rect.x > win_w:
+            finish = True
+            win.blit(text2(250,200))
+            
+
+
+        platform1.reset()
+        platform2.reset()
+        platform1.update_l()
+        platform2.update_r()
+
     display.update()
     clock.tick(60)
