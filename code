@@ -1,0 +1,44 @@
+from pygame import *
+class Game_sprite(sprite.Sprite):
+    def __init__ (self, img, x, y, w, h, speed):
+        super().__init__()
+        self.image = transform.scale(image.load(img), (w, h))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.speed = speed
+    def reset(self):
+        win.blit(self.image, (self.rect.x, self.rect.y))
+ball = Game_sprite('ball.png', 200, 200, 50, 50, 20)
+class Player(Game_sprite):
+    def update_r(self):
+        keys = key.get_pressed()
+        if keys[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_DOWN] and self.rect.y < win_h - 90:
+            self.rect.y += self.speed
+    def update_l(self):
+        keys = key.get_pressed()
+        if keys[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_s] and self.rect.y < win_h - 90:
+            self.rect.y += self.speed
+
+platform1 = Player('platform1.png', 30, 200, 90, 90, 10) 
+platform2 = Player('platform2.png', 520, 200, 90, 90, 10)
+back = (129, 197, 111)
+win_w = 600
+win_h = 600
+win = display.set_mode((win_w, win_h))
+game = True
+finish = False
+clock = time.Clock()
+while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    if finish != True:
+        win.fill(back)
+        ball.reset()
+    display.update()
+    clock.tick(60)
